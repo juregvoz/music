@@ -1,9 +1,12 @@
 package com.music.service;
 
-import com.music.dto.GetReleaseDTO;
+import com.music.dto.PostReleaseDTO;
+import com.music.entity.Release;
 
 import java.util.List;
 
 public interface ReleaseService {
-    List<GetReleaseDTO> getReleases();
+    List<Release> getReleases();
+
+    Release createRelease(PostReleaseDTO dto);
 }

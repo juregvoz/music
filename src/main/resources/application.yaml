@@ -1,6 +1,11 @@
 spring:
   datasource:
-    url=jdbc:postgresql://localhost/myDatabase
-    username=user
-    password=password
-    driverClassName=org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/music
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+    driverClassName: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      show_sql: true
+      ddl-auto: none
