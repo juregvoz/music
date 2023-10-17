@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20231710-1
+      author: Jure
+      changes:
+        - createTable:
+            tableName: artist
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+        - addColumn:
+            schemaName: public
+            tableName: release
+            columns:
+              - column:
+                  name: artist_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            schemaName: public
+            baseTableName: release
+            baseColumnNames: artist_id
+            constraintName: fk_release_artist
+            referencedTableName: artist
+            referencedColumnNames: id

@@ -9,3 +9,6 @@ spring:
     hibernate:
       show_sql: true
       ddl-auto: none
+
+  liquibase:
+    enabled: false
