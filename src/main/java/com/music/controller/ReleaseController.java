@@ -1,8 +1,8 @@
 package com.music.controller;
 
-import com.music.dto.PostReleaseDTO;
-import com.music.dto.PutReleaseDTO;
-import com.music.entity.Release;
+import com.music.dto.PostReleaseRequest;
+import com.music.dto.PutReleaseRequest;
+import com.music.dto.ReleaseResponse;
 import com.music.service.ReleaseService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -22,19 +22,19 @@ public class ReleaseController {
   @Autowired ReleaseService releaseService;
 
   @PostMapping
-  public Release createRelease(
-      HttpServletResponse response, @Valid @RequestBody PostReleaseDTO dto) {
+  public ReleaseResponse createRelease(
+      HttpServletResponse response, @Valid @RequestBody PostReleaseRequest dto) {
     response.setStatus(HttpStatus.CREATED.value());
     return releaseService.createRelease(dto);
   }
 
   @GetMapping
-  public List<Release> getReleases() {
+  public List<ReleaseResponse> getReleases() {
     return releaseService.getReleases();
   }
 
   @GetMapping("/{id}")
-  public Release getRelease(@PathVariable @NotNull UUID id) {
+  public ReleaseResponse getRelease(@PathVariable @NotNull UUID id) {
     return releaseService.getRelease(id);
   }
 
@@ -45,8 +45,8 @@ public class ReleaseController {
   }
 
   @PutMapping("/{id}")
-  public Release updateRelease(
-      @PathVariable @NotNull UUID id, @Valid @RequestBody PutReleaseDTO dto) {
+  public ReleaseResponse updateRelease(
+      @PathVariable @NotNull UUID id, @Valid @RequestBody PutReleaseRequest dto) {
     return releaseService.updateRelease(id, dto);
   }
 }

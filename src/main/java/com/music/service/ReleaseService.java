@@ -1,20 +1,20 @@
 package com.music.service;
 
-import com.music.dto.PostReleaseDTO;
-import com.music.dto.PutReleaseDTO;
-import com.music.entity.Release;
+import com.music.dto.PostReleaseRequest;
+import com.music.dto.PutReleaseRequest;
+import com.music.dto.ReleaseResponse;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface ReleaseService {
-  Release createRelease(PostReleaseDTO dto);
+  ReleaseResponse createRelease(PostReleaseRequest dto);
 
-  List<Release> getReleases();
+  List<ReleaseResponse> getReleases();
 
-  Release getRelease(UUID id);
+  ReleaseResponse getRelease(UUID id);
 
-  Release updateRelease(UUID id, PutReleaseDTO dto);
+  ReleaseResponse updateRelease(UUID id, PutReleaseRequest dto);
 
   void deleteRelease(UUID id);
 }

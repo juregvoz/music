@@ -1,12 +1,13 @@
 package com.music.dto;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import java.util.UUID;
 
 @Data
-public class PostReleaseDTO {
+public class ArtistResponse {
 
-  @NotNull
+  UUID id;
+
   String name;
 
   String description;
