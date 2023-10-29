@@ -1,17 +1,17 @@
 package com.music.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.UUID;
 
 @Entity
 @Setter
 @Getter
-public class Release {
+public class Label {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,13 +21,6 @@ public class Release {
 
   private String description;
 
-  @ManyToOne
-  @JoinColumn(nullable = false)
-  @JsonIgnore
-  private Artist artist;
-
-  @ManyToOne
-  @JoinColumn(nullable = false)
-  @JsonIgnore
-  private Label label;
+  @OneToMany(mappedBy = "label")
+  private List<Release> releases;
 }

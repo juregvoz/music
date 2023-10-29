@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20232910-1
+      author: Jure
+      changes:
+        - createTable:
+            tableName: label
+            schemaName: public
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+        - sql:
+            sql: insert into label(id, name, description) values
+                 ('d57b08a1-c372-44cb-9a71-220874fc4a23', 'Unknown artist', 'Placeholder')
+        - addColumn:
+            schemaName: public
+            tableName: release
+            columns:
+              - column:
+                  name: label_id
+                  type: uuid
+                  value: d57b08a1-c372-44cb-9a71-220874fc4a23
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            schemaName: public
+            baseTableName: release
+            baseColumnNames: label_id
+            constraintName: fk_release_label
+            referencedTableName: label
+            referencedColumnNames: id
