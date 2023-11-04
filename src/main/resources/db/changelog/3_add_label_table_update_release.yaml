@@ -23,7 +23,7 @@ databaseChangeLog:
                   type: varchar(255)
         - sql:
             sql: insert into label(id, name, description) values
-                 ('d57b08a1-c372-44cb-9a71-220874fc4a23', 'Unknown artist', 'Placeholder')
+                 ('d57b08a1-c372-44cb-9a71-220874fc4a23', 'Unknown label', 'Placeholder')
         - addColumn:
             schemaName: public
             tableName: release
