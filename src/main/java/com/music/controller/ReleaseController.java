@@ -1,7 +1,7 @@
 package com.music.controller;
 
-import com.music.dto.PostReleaseRequest;
-import com.music.dto.PutReleaseRequest;
+import com.music.dto.ReleasePostRequest;
+import com.music.dto.ReleasePutRequest;
 import com.music.dto.ReleaseResponse;
 import com.music.service.ReleaseService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,7 +23,7 @@ public class ReleaseController {
 
   @PostMapping
   public ReleaseResponse createRelease(
-      HttpServletResponse response, @Valid @RequestBody PostReleaseRequest dto) {
+      HttpServletResponse response, @Valid @RequestBody ReleasePostRequest dto) {
     response.setStatus(HttpStatus.CREATED.value());
     return releaseService.createRelease(dto);
   }
@@ -46,7 +46,7 @@ public class ReleaseController {
 
   @PutMapping("/{id}")
   public ReleaseResponse updateRelease(
-      @PathVariable @NotNull UUID id, @Valid @RequestBody PutReleaseRequest dto) {
+      @PathVariable @NotNull UUID id, @Valid @RequestBody ReleasePutRequest dto) {
     return releaseService.updateRelease(id, dto);
   }
 }

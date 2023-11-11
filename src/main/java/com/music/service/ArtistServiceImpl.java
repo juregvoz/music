@@ -22,7 +22,7 @@ public class ArtistServiceImpl implements ArtistService {
 
   @Override
   @Transactional
-  public ArtistResponse createArtist(ArtistRequest dto) {
+  public ArtistResponse createArtist(ArtistPostRequest dto) {
     Artist artist = artistRepository.save(modelMapper.map(dto, Artist.class));
     return modelMapper.map(artist, ArtistResponse.class);
   }
@@ -57,7 +57,7 @@ public class ArtistServiceImpl implements ArtistService {
 
   @Override
   @Transactional
-  public ArtistResponse updateArtist(UUID id, PutArtistRequest dto) {
+  public ArtistResponse updateArtist(UUID id, ArtistPutRequest dto) {
     final Artist artist = findById(id);
     if (dto.getDescription() != null) {
       artist.setDescription(dto.getDescription());

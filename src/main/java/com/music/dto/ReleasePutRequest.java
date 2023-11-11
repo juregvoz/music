@@ -1,18 +1,17 @@
 package com.music.dto;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.UUID;
 
 @Data
-public class PostReleaseRequest {
+public class ReleasePutRequest {
 
-  @NotNull
   String name;
 
   String description;
 
-  @NotNull
   UUID artistId;
+
+  UUID labelId;
 }

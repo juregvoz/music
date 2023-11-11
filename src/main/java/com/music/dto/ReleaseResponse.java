@@ -14,4 +14,6 @@ public class ReleaseResponse {
   String description;
 
   UUID artistId;
+
+  UUID labelId;
 }

@@ -20,7 +20,7 @@ public class ArtistController {
 
   @PostMapping
   public ArtistResponse createArtist(
-      HttpServletResponse response, @Valid @RequestBody ArtistRequest dto) {
+      HttpServletResponse response, @Valid @RequestBody ArtistPostRequest dto) {
     response.setStatus(HttpStatus.CREATED.value());
     return artistService.createArtist(dto);
   }
@@ -42,7 +42,7 @@ public class ArtistController {
 
   @PutMapping("/{id}")
   public ArtistResponse updateRelease(
-      @PathVariable @NotNull UUID id, @Valid @RequestBody PutArtistRequest dto) {
+      @PathVariable @NotNull UUID id, @Valid @RequestBody ArtistPutRequest dto) {
     return artistService.updateArtist(id, dto);
   }
 

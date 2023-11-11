@@ -1,8 +1,6 @@
 package com.music.service;
 
-import com.music.dto.PostReleaseRequest;
-import com.music.dto.PutReleaseRequest;
-import com.music.dto.ReleaseResponse;
+import com.music.dto.*;
 import com.music.entity.Release;
 import com.music.repository.ReleaseRepository;
 import jakarta.transaction.Transactional;
@@ -23,12 +21,14 @@ public class ReleaseServiceImpl implements ReleaseService {
   @Autowired private ModelMapper modelMapper;
 
   @Autowired private ArtistService artistService;
+  @Autowired private LabelService labelService;
 
   @Override
   @Transactional
-  public ReleaseResponse createRelease(PostReleaseRequest dto) {
+  public ReleaseResponse createRelease(ReleasePostRequest dto) {
     Release release = modelMapper.map(dto, Release.class);
     release.setArtist(artistService.getArtistEntity(dto.getArtistId()));
+    release.setLabel(labelService.getLabelEntity(dto.getLabelId()));
     return modelMapper.map(releaseRepository.save(release), ReleaseResponse.class);
   }
 
@@ -48,14 +48,25 @@ public class ReleaseServiceImpl implements ReleaseService {
 
   @Override
   @Transactional
-  public ReleaseResponse updateRelease(UUID id, PutReleaseRequest dto) {
+  public ReleaseResponse updateRelease(UUID id, ReleasePutRequest dto) {
     final Release release = findById(id);
+
     if (dto.getDescription() != null) {
       release.setDescription(dto.getDescription());
     }
+
     if (dto.getName() != null) {
       release.setName(dto.getName());
     }
+
+    if (dto.getArtistId() != null) {
+      release.setArtist(artistService.getArtistEntity(dto.getArtistId()));
+    }
+
+    if (dto.getLabelId() != null) {
+      release.setLabel(labelService.getLabelEntity(dto.getLabelId()));
+    }
+
     return modelMapper.map(releaseRepository.save(release), ReleaseResponse.class);
   }
 

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ArtistService {
-  ArtistResponse createArtist(ArtistRequest dto);
+  ArtistResponse createArtist(ArtistPostRequest dto);
 
   List<ArtistResponse> getArtists();
 
@@ -16,7 +16,7 @@ public interface ArtistService {
 
   List<ReleaseResponse> getArtistReleases(UUID id);
 
-  ArtistResponse updateArtist(UUID id, PutArtistRequest dto);
+  ArtistResponse updateArtist(UUID id, ArtistPutRequest dto);
 
   void deleteArtist(UUID id);
 }
