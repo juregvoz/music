@@ -1,16 +1,12 @@
 package com.music.dto;
 
 import java.util.List;
-import java.util.UUID;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class LabelInfoResponse {
-    UUID id;
+@EqualsAndHashCode(callSuper = true)
+public class LabelInfoResponse extends ResponseParent {
 
-    String name;
-
-    String description;
-
-    List<ReleaseResponse> releases;
+  List<ReleaseResponse> releases;
 }

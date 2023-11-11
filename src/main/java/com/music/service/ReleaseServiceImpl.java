@@ -3,6 +3,7 @@ package com.music.service;
 import com.music.dto.*;
 import com.music.entity.Release;
 import com.music.repository.ReleaseRepository;
+import com.music.utils.Utils;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ public class ReleaseServiceImpl implements ReleaseService {
 
   @Autowired private ArtistService artistService;
   @Autowired private LabelService labelService;
+
+  @Autowired private Utils utils;
 
   @Override
   @Transactional
@@ -48,25 +51,14 @@ public class ReleaseServiceImpl implements ReleaseService {
 
   @Override
   @Transactional
-  public ReleaseResponse updateRelease(UUID id, ReleasePutRequest dto) {
-    final Release release = findById(id);
-
-    if (dto.getDescription() != null) {
-      release.setDescription(dto.getDescription());
-    }
-
-    if (dto.getName() != null) {
-      release.setName(dto.getName());
-    }
-
-    if (dto.getArtistId() != null) {
-      release.setArtist(artistService.getArtistEntity(dto.getArtistId()));
-    }
-
-    if (dto.getLabelId() != null) {
-      release.setLabel(labelService.getLabelEntity(dto.getLabelId()));
-    }
-
+  public ReleaseResponse updateRelease(UUID releaseId, ReleasePutRequest dto) {
+    final Release release = findById(releaseId);
+    utils.updateIfPresent(dto.getName(), release::setName);
+    utils.updateIfPresent(dto.getDescription(), release::setDescription);
+    utils.updateIfPresent(
+        dto.getArtistId(), id -> release.setArtist(artistService.getArtistEntity(id)));
+    utils.updateIfPresent(
+        dto.getLabelId(), id -> release.setLabel(labelService.getLabelEntity(id)));
     return modelMapper.map(releaseRepository.save(release), ReleaseResponse.class);
   }
 

@@ -3,6 +3,7 @@ package com.music.service;
 import com.music.dto.*;
 import com.music.entity.Artist;
 import com.music.repository.ArtistRepository;
+import com.music.utils.Utils;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class ArtistServiceImpl implements ArtistService {
   @Autowired private ArtistRepository artistRepository;
 
   @Autowired private ModelMapper modelMapper;
+
+  @Autowired private Utils utils;
 
   @Override
   @Transactional
@@ -59,12 +62,8 @@ public class ArtistServiceImpl implements ArtistService {
   @Transactional
   public ArtistResponse updateArtist(UUID id, ArtistPutRequest dto) {
     final Artist artist = findById(id);
-    if (dto.getDescription() != null) {
-      artist.setDescription(dto.getDescription());
-    }
-    if (dto.getName() != null) {
-      artist.setName(dto.getName());
-    }
+    utils.updateIfPresent(dto.getName(), artist::setName);
+    utils.updateIfPresent(dto.getDescription(), artist::setDescription);
     return modelMapper.map(artistRepository.save(artist), ArtistResponse.class);
   }
 

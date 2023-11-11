@@ -1,17 +1,13 @@
 package com.music.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
-public class ArtistInfoResponse {
-    UUID id;
+@EqualsAndHashCode(callSuper = true)
+public class ArtistInfoResponse extends ResponseParent {
 
-    String name;
-
-    String description;
-
-    List<ReleaseResponse> releases;
+  List<ReleaseResponse> releases;
 }

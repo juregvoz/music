@@ -3,6 +3,7 @@ package com.music.service;
 import com.music.dto.*;
 import com.music.entity.Label;
 import com.music.repository.LabelRepository;
+import com.music.utils.Utils;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class LabelServiceImpl implements LabelService {
   @Autowired private LabelRepository labelRepository;
 
   @Autowired private ModelMapper modelMapper;
+
+  @Autowired private Utils utils;
 
   @Override
   @Transactional
@@ -60,12 +63,8 @@ public class LabelServiceImpl implements LabelService {
   @Transactional
   public LabelResponse updateLabel(UUID id, LabelPutRequest dto) {
     final Label label = findById(id);
-    if (dto.getDescription() != null) {
-      label.setDescription(dto.getDescription());
-    }
-    if (dto.getName() != null) {
-      label.setName(dto.getName());
-    }
+    utils.updateIfPresent(dto.getName(), label::setName);
+    utils.updateIfPresent(dto.getDescription(), label::setDescription);
     return modelMapper.map(labelRepository.save(label), LabelResponse.class);
   }
 
