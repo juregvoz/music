@@ -41,7 +41,7 @@ public class ArtistController {
   }
 
   @PutMapping("/{id}")
-  public ArtistResponse updateRelease(
+  public ArtistResponse updateArtist(
       @PathVariable @NotNull UUID id, @Valid @RequestBody ArtistPutRequest dto) {
     return artistService.updateArtist(id, dto);
   }

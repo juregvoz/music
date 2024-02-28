@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:music
+    username: sa
+    password: sa
+    driverClassName: org.h2.Driver
+
+  jpa:
+    hibernate:
+      show_sql: true
+      dialect: org.hibernate.dialect.H2Dialect
+      ddl-auto: create-drop
+
+logging:
+  level:
+    root: INFO
+
