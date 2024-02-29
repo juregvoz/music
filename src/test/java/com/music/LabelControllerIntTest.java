@@ -1,21 +1,14 @@
 package com.music;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.junit5.api.DBRider;
-import com.music.dto.ArtistInfoResponse;
-import com.music.dto.ArtistPostRequest;
-import com.music.dto.ArtistPutRequest;
-import com.music.dto.ArtistResponse;
-import java.util.List;
-import java.util.UUID;
-import org.junit.jupiter.api.*;
+import com.music.dto.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,11 +19,18 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.zalando.problem.DefaultProblem;
 
+import java.util.List;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @SpringBootTest
 @ActiveProfiles("test")
 @DBRider
 @AutoConfigureMockMvc
-public class ArtistControllerIntTest {
+public class LabelControllerIntTest {
 
   @Autowired MockMvc mockMvc;
 
@@ -41,38 +41,38 @@ public class ArtistControllerIntTest {
   void cleanDatabase() {}
 
   @Test
-  @ExpectedDataSet(value = "artist.yaml", ignoreCols = "id")
-  void createArist_success() throws Exception {
-    ArtistPostRequest artistPostRequest = TestData.artistPostRequest();
+  @ExpectedDataSet(value = "label.yaml", ignoreCols = "id")
+  void createLabel_success() throws Exception {
+    LabelPostRequest labelPostRequest = TestData.labelPostRequest();
     String contentString =
         mockMvc
             .perform(
-                post("/artists")
+                post("/labels")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(artistPostRequest)))
+                    .content(objectMapper.writeValueAsString(labelPostRequest)))
             .andExpect(status().isCreated())
             .andReturn()
             .getResponse()
             .getContentAsString();
 
-    ArtistResponse content = objectMapper.readValue(contentString, ArtistResponse.class);
+    LabelResponse content = objectMapper.readValue(contentString, LabelResponse.class);
 
     // assert
     assertAll(
-        () -> Assertions.assertEquals(artistPostRequest.getDescription(), content.getDescription()),
-        () -> Assertions.assertEquals(artistPostRequest.getName(), content.getName()),
+        () -> Assertions.assertEquals(labelPostRequest.getDescription(), content.getDescription()),
+        () -> Assertions.assertEquals(labelPostRequest.getName(), content.getName()),
         () -> assertInstanceOf(UUID.class, content.getId()));
   }
 
   @Test
-  void createArtist_noName_throwsException() throws Exception {
-    ArtistPostRequest artistPostRequest = new ArtistPostRequest();
+  void createLabel_noName_throwsException() throws Exception {
+    LabelPostRequest labelPostRequest = new LabelPostRequest();
     MvcResult result =
         mockMvc
             .perform(
-                post("/artists")
+                post("/labels")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(artistPostRequest)))
+                    .content(objectMapper.writeValueAsString(labelPostRequest)))
             .andExpect(status().isBadRequest())
             .andReturn();
 
@@ -82,16 +82,16 @@ public class ArtistControllerIntTest {
 
   @Test
   @DataSet("fullDatabase.yaml")
-  void getArtists_success() throws Exception {
+  void getLabels_success() throws Exception {
     String contentString =
         mockMvc
-            .perform(get("/artists"))
+            .perform(get("/labels"))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse()
             .getContentAsString();
 
-    List<ArtistResponse> content = objectMapper.readValue(contentString, new TypeReference<>() {});
+    List<LabelResponse> content = objectMapper.readValue(contentString, new TypeReference<>() {});
 
     // assert
     assertEquals(2, content.toArray().length);
@@ -99,30 +99,30 @@ public class ArtistControllerIntTest {
 
   @Test
   @DataSet("fullDatabase.yaml")
-  void getArtist_success() throws Exception {
-    ArtistInfoResponse artist = TestData.artistInfoResponse();
+  void getLabel_success() throws Exception {
+    LabelInfoResponse label = TestData.labelInfoResponse();
     String contentString =
         mockMvc
-            .perform(get(String.format("/artists/%s", artist.getId())))
+            .perform(get(String.format("/labels/%s", label.getId())))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse()
             .getContentAsString();
 
-    ArtistInfoResponse content = objectMapper.readValue(contentString, ArtistInfoResponse.class);
+    LabelInfoResponse content = objectMapper.readValue(contentString, LabelInfoResponse.class);
 
     // assert
-    assertEquals(artist, content);
+    assertEquals(label, content);
   }
 
   @Test
   @DataSet("emptyDatabase.yaml")
-  void getArtis_notFound_throwsException() throws Exception {
+  void getLabel_notFound_throwsException() throws Exception {
     UUID id = UUID.fromString("74377b54-67f5-4469-b7fe-d225d7d3902e");
 
     Exception exception =
         mockMvc
-            .perform(get(String.format("/artists/%s", id)))
+            .perform(get(String.format("/labels/%s", id)))
             .andExpect(status().isNotFound())
             .andReturn()
             .getResolvedException();
@@ -132,46 +132,46 @@ public class ArtistControllerIntTest {
         () -> assertInstanceOf(DefaultProblem.class, exception),
         () ->
             assertEquals(
-                String.format("Artist with id [%s] not found", id), exception.getMessage()));
+                String.format("Label with id [%s] not found", id), exception.getMessage()));
   }
 
   @Test
-  @DataSet(value = "artist.yaml")
-  @ExpectedDataSet(value = "artistUpdated.yaml")
-  void updateArtist_success() throws Exception {
-    UUID id = TestData.artistResponse().getId();
-    ArtistPutRequest artistPutRequest = TestData.artistPutRequest();
+  @DataSet("label.yaml")
+  @ExpectedDataSet("labelUpdated.yaml")
+  void updateLabel_success() throws Exception {
+    UUID id = TestData.labelResponse().getId();
+    LabelPutRequest labelPutRequest = TestData.labelPutRequest();
     String contentString =
         mockMvc
             .perform(
-                put(String.format("/artists/%s", id))
+                put(String.format("/labels/%s", id))
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(artistPutRequest)))
+                    .content(objectMapper.writeValueAsString(labelPutRequest)))
             .andExpect(status().isOk())
             .andReturn()
             .getResponse()
             .getContentAsString();
 
-    ArtistResponse artistResponse = objectMapper.readValue(contentString, ArtistResponse.class);
+    LabelResponse content = objectMapper.readValue(contentString, LabelResponse.class);
 
-    assertEquals(TestData.artistUpdatedResponse(), artistResponse);
+    assertEquals(TestData.labelUpdatedResponse(), content);
   }
 
   @Test
-  @DataSet("artist.yaml")
+  @DataSet("label.yaml")
   @ExpectedDataSet("emptyDatabase.yaml")
-  void deleteArtist_success() throws Exception {
-    UUID id = TestData.artistResponse().getId();
-    mockMvc.perform(delete(String.format("/artists/%s", id))).andExpect(status().isOk());
+  void deleteLabel_success() throws Exception {
+    UUID id = TestData.labelResponse().getId();
+    mockMvc.perform(delete(String.format("/labels/%s", id))).andExpect(status().isOk());
   }
 
   @Test
   @DataSet("fullDatabase.yaml")
-  void deleteArtist_hasRelatedReleases_throwsException() throws Exception {
-    UUID id = TestData.artistResponse().getId();
+  void deleteLabel_hasRelatedReleases_throwsException() throws Exception {
+    UUID id = TestData.labelResponse().getId();
     Exception exception =
         mockMvc
-            .perform(delete(String.format("/artists/%s", id)))
+            .perform(delete(String.format("/labels/%s", id)))
             .andExpect(status().isUnprocessableEntity())
             .andReturn()
             .getResolvedException();
@@ -180,7 +180,7 @@ public class ArtistControllerIntTest {
         () -> assertInstanceOf(DefaultProblem.class, exception),
         () ->
             assertEquals(
-                String.format("Artist with id [%s] has related releases and can't be deleted", id),
+                String.format("Label with id [%s] has related releases and can't be deleted", id),
                 exception.getMessage()));
   }
 }

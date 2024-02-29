@@ -49,6 +49,47 @@ public class TestData {
         return artist;
     }
 
+    // Label
+
+    public static LabelPostRequest labelPostRequest() {
+        LabelPostRequest labelPostRequest = new LabelPostRequest();
+        labelPostRequest.setName("Rolling Records");
+        labelPostRequest.setDescription("Big label");
+        return labelPostRequest;
+    }
+
+    public static LabelResponse labelResponse() {
+        LabelResponse label = new LabelResponse();
+        label.setId(UUID.fromString("82d41545-50c3-44b4-be2c-3585080985be"));
+        label.setName("Rolling Records");
+        label.setDescription("Big label");
+        return label;
+    }
+
+    public static LabelInfoResponse labelInfoResponse() {
+        LabelResponse label = labelResponse();
+        LabelInfoResponse labelInfo = new LabelInfoResponse();
+        labelInfo.setId(label.getId());
+        labelInfo.setName(label.getName());
+        labelInfo.setDescription(label.getDescription());
+        labelInfo.setReleases(List.of(releaseResponse()));
+        return labelInfo;
+    }
+
+    public static LabelPutRequest labelPutRequest() {
+        LabelPutRequest label = new LabelPutRequest();
+        label.setName("Jugoton");
+        label.setDescription("Yugoslavian record label");
+        return label;
+    }
+
+    public static LabelResponse labelUpdatedResponse() {
+        LabelResponse label = new LabelResponse();
+        label.setId(UUID.fromString("82d41545-50c3-44b4-be2c-3585080985be"));
+        label.setName("Jugoton");
+        label.setDescription("Yugoslavian record label");
+        return label;
+    }
 
     // Release
 
