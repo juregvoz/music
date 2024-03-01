@@ -9,7 +9,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,15 +37,14 @@ public class ReleaseController {
     return releaseService.getRelease(id);
   }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteRelease(@PathVariable @NotNull UUID id) {
-    releaseService.deleteRelease(id);
-    return ResponseEntity.noContent().build();
-  }
-
   @PutMapping("/{id}")
   public ReleaseResponse updateRelease(
       @PathVariable @NotNull UUID id, @Valid @RequestBody ReleasePutRequest dto) {
     return releaseService.updateRelease(id, dto);
+  }
+
+  @DeleteMapping("/{id}")
+  public void deleteRelease(@PathVariable @NotNull UUID id) {
+    releaseService.deleteRelease(id);
   }
 }

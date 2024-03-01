@@ -1,0 +1,14 @@
+ARTIST:
+  - ID: "f0e71426-ae75-4a67-985f-d564a0458bad"
+    NAME: "Rolling Stones"
+    DESCRIPTION: "Some band"
+LABEL:
+  - ID: "82d41545-50c3-44b4-be2c-3585080985be"
+    NAME: "Rolling Records"
+    DESCRIPTION: "Big label"
+RELEASE:
+  - ID: "3e7c8e4f-8666-48a9-9e69-ffb8e74585c9"
+    NAME: "Gimme Shelter"
+    DESCRIPTION: "You can hear it in many Martin Scorsese's movies."
+    ARTIST_ID: "f0e71426-ae75-4a67-985f-d564a0458bad"
+    LABEL_ID: "82d41545-50c3-44b4-be2c-3585080985be"

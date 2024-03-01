@@ -93,11 +93,37 @@ public class TestData {
 
     // Release
 
+    public static ReleasePostRequest releasePostRequest() {
+        ReleasePostRequest releasePostRequest = new ReleasePostRequest();
+        releasePostRequest.setName("Gimme Shelter");
+        releasePostRequest.setDescription("You can hear it in many Martin Scorsese's movies.");
+        releasePostRequest.setLabelId(UUID.fromString("82d41545-50c3-44b4-be2c-3585080985be"));
+        releasePostRequest.setArtistId(UUID.fromString("f0e71426-ae75-4a67-985f-d564a0458bad"));
+        return releasePostRequest;
+    }
+
     public static ReleaseResponse releaseResponse() {
         ReleaseResponse release = new ReleaseResponse();
         release.setId(UUID.fromString("3e7c8e4f-8666-48a9-9e69-ffb8e74585c9"));
         release.setName("Gimme Shelter");
         release.setDescription("You can hear it in many Martin Scorsese's movies.");
+        release.setArtistId(UUID.fromString("f0e71426-ae75-4a67-985f-d564a0458bad"));
+        release.setLabelId(UUID.fromString("82d41545-50c3-44b4-be2c-3585080985be"));
+        return release;
+    }
+
+    public static ReleasePutRequest releasePutRequest() {
+        ReleasePutRequest release = new ReleasePutRequest();
+        release.setName("Satisfaction");
+        release.setDescription("Legendary riff");
+        return release;
+    }
+
+    public static ReleaseResponse releaseUpdatedResponse() {
+        ReleaseResponse release = new ReleaseResponse();
+        release.setId(UUID.fromString("3e7c8e4f-8666-48a9-9e69-ffb8e74585c9"));
+        release.setName("Satisfaction");
+        release.setDescription("Legendary riff");
         release.setArtistId(UUID.fromString("f0e71426-ae75-4a67-985f-d564a0458bad"));
         release.setLabelId(UUID.fromString("82d41545-50c3-44b4-be2c-3585080985be"));
         return release;
