@@ -15,6 +15,8 @@ import com.music.dto.ArtistPutRequest;
 import com.music.dto.ArtistResponse;
 import java.util.List;
 import java.util.UUID;
+
+import com.music.dto.Error;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,8 +24,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.zalando.problem.DefaultProblem;
 
 @SpringBootTest
@@ -67,17 +67,21 @@ public class ArtistControllerIntTest {
   @Test
   void createArtist_noName_throwsException() throws Exception {
     ArtistPostRequest artistPostRequest = new ArtistPostRequest();
-    MvcResult result =
+    String contentString =
         mockMvc
             .perform(
                 post("/artists")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(artistPostRequest)))
             .andExpect(status().isBadRequest())
-            .andReturn();
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+    Error error = objectMapper.readValue(contentString, Error.class);
 
     // assert
-    assertInstanceOf(MethodArgumentNotValidException.class, result.getResolvedException());
+    assertEquals("[{name=must not be null}]", error.getMessage());
   }
 
   @Test

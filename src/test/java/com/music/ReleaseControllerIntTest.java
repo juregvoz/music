@@ -6,6 +6,7 @@ import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.junit5.api.DBRider;
 import com.music.dto.*;
+import com.music.dto.Error;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -18,7 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.zalando.problem.DefaultProblem;
 
 import java.util.List;
@@ -74,8 +74,7 @@ public class ReleaseControllerIntTest {
   @Test
   void createRelease_noRequiredFields_throwsException() throws Exception {
     ReleasePostRequest releasePostRequest = new ReleasePostRequest();
-
-    Exception exception =
+    String contentString =
         mockMvc
             .perform(
                 post("/releases")
@@ -83,12 +82,15 @@ public class ReleaseControllerIntTest {
                     .content(objectMapper.writeValueAsString(releasePostRequest)))
             .andExpect(status().isBadRequest())
             .andReturn()
-            .getResolvedException();
+            .getResponse()
+            .getContentAsString();
+
+    Error error = objectMapper.readValue(contentString, Error.class);
 
     // assert
-    assertAll(
-        () -> assertInstanceOf(MethodArgumentNotValidException.class, exception),
-        () -> assertEquals(3, ((MethodArgumentNotValidException) exception).getFieldErrorCount()));
+    assertEquals(
+        "[{artistId=must not be null}, {labelId=must not be null}, {name=must not be null}]",
+        error.getMessage());
   }
 
   @DataSet("artistLabel.yaml")

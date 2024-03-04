@@ -6,6 +6,7 @@ import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.junit5.api.DBRider;
 import com.music.dto.*;
+import com.music.dto.Error;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -67,17 +68,21 @@ public class LabelControllerIntTest {
   @Test
   void createLabel_noName_throwsException() throws Exception {
     LabelPostRequest labelPostRequest = new LabelPostRequest();
-    MvcResult result =
+    String contentString =
         mockMvc
             .perform(
                 post("/labels")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(labelPostRequest)))
             .andExpect(status().isBadRequest())
-            .andReturn();
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+    Error error = objectMapper.readValue(contentString, Error.class);
 
     // assert
-    assertInstanceOf(MethodArgumentNotValidException.class, result.getResolvedException());
+    assertEquals("[{name=must not be null}]", error.getMessage());
   }
 
   @Test
