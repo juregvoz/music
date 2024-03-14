@@ -6,7 +6,6 @@ import com.music.repository.ArtistRepository;
 import com.music.utils.Utils;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
@@ -17,11 +16,13 @@ import java.util.stream.Collectors;
 @Service
 public class ArtistServiceImpl implements ArtistService {
 
-  @Autowired private ArtistRepository artistRepository;
+  private final ArtistRepository artistRepository;
+  private final ModelMapper modelMapper;
 
-  @Autowired private ModelMapper modelMapper;
-
-  @Autowired private Utils utils;
+  public ArtistServiceImpl(ArtistRepository artistRepository, ModelMapper modelMapper) {
+    this.artistRepository = artistRepository;
+    this.modelMapper = modelMapper;
+  }
 
   @Override
   @Transactional
@@ -62,8 +63,8 @@ public class ArtistServiceImpl implements ArtistService {
   @Transactional
   public ArtistResponse updateArtist(UUID id, ArtistPutRequest dto) {
     final Artist artist = findById(id);
-    utils.updateIfPresent(dto.getName(), artist::setName);
-    utils.updateIfPresent(dto.getDescription(), artist::setDescription);
+    Utils.updateIfPresent(dto.getName(), artist::setName);
+    Utils.updateIfPresent(dto.getDescription(), artist::setDescription);
     return modelMapper.map(artistRepository.save(artist), ArtistResponse.class);
   }
 

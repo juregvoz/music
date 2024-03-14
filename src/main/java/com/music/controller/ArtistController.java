@@ -5,7 +5,6 @@ import com.music.service.ArtistService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +15,11 @@ import java.util.UUID;
 @RequestMapping(path = "artists")
 public class ArtistController {
 
-  @Autowired ArtistService artistService;
+  private final ArtistService artistService;
+
+  ArtistController(ArtistService artistService) {
+    this.artistService = artistService;
+  }
 
   @PostMapping
   public ArtistResponse createArtist(

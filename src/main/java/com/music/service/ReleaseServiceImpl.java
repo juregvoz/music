@@ -6,7 +6,6 @@ import com.music.repository.ReleaseRepository;
 import com.music.utils.Utils;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zalando.problem.*;
 
@@ -17,14 +16,21 @@ import java.util.stream.Collectors;
 @Service
 public class ReleaseServiceImpl implements ReleaseService {
 
-  @Autowired private ReleaseRepository releaseRepository;
+  private final ReleaseRepository releaseRepository;
+  private final ModelMapper modelMapper;
+  private final ArtistService artistService;
+  private final LabelService labelService;
 
-  @Autowired private ModelMapper modelMapper;
-
-  @Autowired private ArtistService artistService;
-  @Autowired private LabelService labelService;
-
-  @Autowired private Utils utils;
+  ReleaseServiceImpl(
+      ReleaseRepository releaseRepository,
+      ArtistService artistService,
+      LabelService labelService,
+      ModelMapper modelMapper) {
+    this.releaseRepository = releaseRepository;
+    this.artistService = artistService;
+    this.labelService = labelService;
+    this.modelMapper = modelMapper;
+  }
 
   @Override
   @Transactional
@@ -53,11 +59,11 @@ public class ReleaseServiceImpl implements ReleaseService {
   @Transactional
   public ReleaseResponse updateRelease(UUID releaseId, ReleasePutRequest dto) {
     final Release release = findById(releaseId);
-    utils.updateIfPresent(dto.getName(), release::setName);
-    utils.updateIfPresent(dto.getDescription(), release::setDescription);
-    utils.updateIfPresent(
+    Utils.updateIfPresent(dto.getName(), release::setName);
+    Utils.updateIfPresent(dto.getDescription(), release::setDescription);
+    Utils.updateIfPresent(
         dto.getArtistId(), id -> release.setArtist(artistService.getArtistEntity(id)));
-    utils.updateIfPresent(
+    Utils.updateIfPresent(
         dto.getLabelId(), id -> release.setLabel(labelService.getLabelEntity(id)));
     return modelMapper.map(releaseRepository.save(release), ReleaseResponse.class);
   }

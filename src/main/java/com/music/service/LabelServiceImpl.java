@@ -6,7 +6,6 @@ import com.music.repository.LabelRepository;
 import com.music.utils.Utils;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zalando.problem.Problem;
 import org.zalando.problem.Status;
@@ -18,11 +17,13 @@ import java.util.stream.Collectors;
 @Service
 public class LabelServiceImpl implements LabelService {
 
-  @Autowired private LabelRepository labelRepository;
+  private final LabelRepository labelRepository;
+  private final ModelMapper modelMapper;
 
-  @Autowired private ModelMapper modelMapper;
-
-  @Autowired private Utils utils;
+  LabelServiceImpl(LabelRepository labelRepository, ModelMapper modelMapper) {
+    this.labelRepository = labelRepository;
+    this.modelMapper = modelMapper;
+  }
 
   @Override
   @Transactional
@@ -63,8 +64,8 @@ public class LabelServiceImpl implements LabelService {
   @Transactional
   public LabelResponse updateLabel(UUID id, LabelPutRequest dto) {
     final Label label = findById(id);
-    utils.updateIfPresent(dto.getName(), label::setName);
-    utils.updateIfPresent(dto.getDescription(), label::setDescription);
+    Utils.updateIfPresent(dto.getName(), label::setName);
+    Utils.updateIfPresent(dto.getDescription(), label::setDescription);
     return modelMapper.map(labelRepository.save(label), LabelResponse.class);
   }
 

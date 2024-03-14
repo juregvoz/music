@@ -5,7 +5,6 @@ import com.music.service.LabelService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +15,10 @@ import java.util.UUID;
 @RequestMapping(path = "labels")
 public class LabelController {
 
-    @Autowired
-    LabelService labelService;
+    private final LabelService labelService;
+    LabelController(LabelService labelService) {
+        this.labelService = labelService;
+    }
 
     @PostMapping
     public LabelResponse createLabel(

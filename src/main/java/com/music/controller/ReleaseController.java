@@ -7,7 +7,6 @@ import com.music.service.ReleaseService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +17,11 @@ import java.util.UUID;
 @RequestMapping(path = "releases")
 public class ReleaseController {
 
-  @Autowired ReleaseService releaseService;
+  private final ReleaseService releaseService;
+
+  ReleaseController(ReleaseService releaseService) {
+    this.releaseService = releaseService;
+  }
 
   @PostMapping
   public ReleaseResponse createRelease(
