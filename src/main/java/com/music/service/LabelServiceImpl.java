@@ -20,7 +20,7 @@ public class LabelServiceImpl implements LabelService {
   private final LabelRepository labelRepository;
   private final ModelMapper modelMapper;
 
-  LabelServiceImpl(LabelRepository labelRepository, ModelMapper modelMapper) {
+  public LabelServiceImpl(LabelRepository labelRepository, ModelMapper modelMapper) {
     this.labelRepository = labelRepository;
     this.modelMapper = modelMapper;
   }

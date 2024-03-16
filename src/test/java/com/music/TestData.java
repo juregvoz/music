@@ -86,6 +86,15 @@ public class TestData {
         return label;
     }
 
+    public static Label labelUpdated() {
+        Label label = new Label();
+        label.setId(UUID.fromString("82d41545-50c3-44b4-be2c-3585080985be"));
+        label.setName("Jugoton");
+        label.setDescription("Yugoslavian record label");
+        label.setReleases(List.of());
+        return label;
+    }
+
     public static Label labelWithRelease() {
         Label label = label();
         label.setReleases(List.of(release()));
