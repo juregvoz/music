@@ -21,7 +21,7 @@ public class ReleaseServiceImpl implements ReleaseService {
   private final ArtistService artistService;
   private final LabelService labelService;
 
-  ReleaseServiceImpl(
+  public ReleaseServiceImpl(
       ReleaseRepository releaseRepository,
       ArtistService artistService,
       LabelService labelService,

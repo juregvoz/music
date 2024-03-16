@@ -10,7 +10,7 @@ import org.springframework.context.annotation.*;
 public class GeneralConfiguration {
 
   @Bean
-  public ModelMapper modelMapper() {
+  public static ModelMapper modelMapper() {
     ModelMapper modelMapper = new ModelMapper();
     modelMapper
         .emptyTypeMap(ReleasePostRequest.class, Release.class)
