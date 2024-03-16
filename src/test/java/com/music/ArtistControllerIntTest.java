@@ -121,7 +121,7 @@ public class ArtistControllerIntTest {
 
   @Test
   @DataSet("emptyDatabase.yaml")
-  void getArtis_notFound_throwsException() throws Exception {
+  void getArtist_notFound_throwsException() throws Exception {
     UUID id = UUID.fromString("74377b54-67f5-4469-b7fe-d225d7d3902e");
 
     Exception exception =

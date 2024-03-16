@@ -1,6 +1,9 @@
 package com.music;
 
 import com.music.dto.*;
+import com.music.entity.Artist;
+import com.music.entity.Label;
+import com.music.entity.Release;
 
 import java.util.List;
 import java.util.UUID;
@@ -8,6 +11,29 @@ import java.util.UUID;
 public class TestData {
 
     // Artist
+
+    public static Artist artist() {
+        Artist artist = new Artist();
+        artist.setName("Rolling Stones");
+        artist.setDescription("Some band");
+        artist.setId(UUID.fromString("f0e71426-ae75-4a67-985f-d564a0458bad"));
+        artist.setReleases(List.of());
+        return artist;
+    }
+
+    public static Artist artistUpdated() {
+        Artist artist = new Artist();
+        artist.setName("Darude");
+        artist.setDescription("Legendary Finnish musician.");
+        artist.setId(UUID.fromString("f0e71426-ae75-4a67-985f-d564a0458bad"));
+        return artist;
+    }
+
+    public static Artist artistWithRelease() {
+        Artist artist = artist();
+        artist.setReleases(List.of(release()));
+        return artist;
+    }
 
     public static ArtistPostRequest artistPostRequest() {
         ArtistPostRequest artistPostRequest = new ArtistPostRequest();
@@ -51,6 +77,21 @@ public class TestData {
 
     // Label
 
+    public static Label label() {
+        Label label = new Label();
+        label.setId(UUID.fromString("82d41545-50c3-44b4-be2c-3585080985be"));
+        label.setName("Rolling Records");
+        label.setDescription("Big label");
+        label.setReleases(List.of());
+        return label;
+    }
+
+    public static Label labelWithRelease() {
+        Label label = label();
+        label.setReleases(List.of(release()));
+        return label;
+    }
+
     public static LabelPostRequest labelPostRequest() {
         LabelPostRequest labelPostRequest = new LabelPostRequest();
         labelPostRequest.setName("Rolling Records");
@@ -92,6 +133,16 @@ public class TestData {
     }
 
     // Release
+
+    public static Release release() {
+        Release release = new Release();
+        release.setId(UUID.fromString("3e7c8e4f-8666-48a9-9e69-ffb8e74585c9"));
+        release.setName("Gimme Shelter");
+        release.setDescription("You can hear it in many Martin Scorsese's movies.");
+        release.setArtist(artist());
+        release.setLabel(label());
+        return release;
+    }
 
     public static ReleasePostRequest releasePostRequest() {
         ReleasePostRequest releasePostRequest = new ReleasePostRequest();
